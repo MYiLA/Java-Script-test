@@ -1,8 +1,4 @@
-
-const invoices = require("./invoices.json");
-const plays = require("./plays.json");
-
-
+const getDeclension = require("./get-declension.js");
 
 const format = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -10,26 +6,19 @@ const format = new Intl.NumberFormat("ru-RU", {
   minimumFractionDigits: 2
 }).format;
 
-
-
 const calcBonus = (type, audience) => {
 
   let bonus = Math.max(audience - 30, 0);
 
-  // Дополнительный бонус за каждые 10 комедий
-
-  // Возможно вы имели в виду "бонус за каждые 10 человек в аудитории комедии?"
-  // иначе получается несоизмеримо мало кредитов в бонусе, по сравнению с 
-  // бонусами в других позициях
+  // Предположу что вы имели в виду "бонус за каждые 10 человек в аудитории комедии?"
+  // Если имелось ввиду "Дополнительный бонус за каждые 10 постановок комедий", то непонятно по какой формуле считать бонусы
 
   if (type === "comedy") {
     bonus += Math.floor(audience / 10);
   };
 
   return bonus;
-}
-
-
+};
 
 const calcPrice = (type, audience) => {
   let price = 0;
@@ -52,33 +41,28 @@ const calcPrice = (type, audience) => {
       throw new Error(`неизвестный тип: ${type}`);
   }
 
-  return price
-}
+  return price;
+};
 
+const calcOrder = (invoice, plays) => {
+  let totalBonus = 0;
+  let totalPrice = 0;
+  let result = `Счет для ${invoice.customer}\n`;
 
-
-let totalBonus = 0;
-let totalPrice = 0;
-
-function statement(invoice, plays) {
-  let result = `Счет для ${invoice[0].customer}\n`;
-
-  for (let perf of invoice[0].performances) {
-    const play = plays[0][perf.playId];
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playId];
     const price = calcPrice(play.type, perf.audience);
 
     totalPrice += price;
     totalBonus += calcBonus(play.type, perf.audience);
 
-    result += `${play.name}: ${format(price / 100)} (${perf.audience} мест)\n`;
+    result += `${play.name}: ${format(price / 100)} (${perf.audience} ${getDeclension(perf.audience, 'место', 'места', 'мест')})\n`;
   }
 
   result += `Итого с вас ${format(totalPrice / 100)}\n`;
-  result += `Вы заработали ${totalBonus} бонусов\n`;
+  result += `Вы заработали ${totalBonus} ${getDeclension(totalBonus, 'бонус', 'бонуса', 'бонусов')}\n`;  
 
   return result;
-}
+};
 
-
-
-  console.log(statement(invoices, plays));
+module.exports = calcOrder;
