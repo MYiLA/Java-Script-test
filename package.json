@@ -1,0 +1,20 @@
+{
+  "name": "java-and-script-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "statement.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MYiLA/java-and-script-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MYiLA/java-and-script-test/issues"
+  },
+  "homepage": "https://github.com/MYiLA/java-and-script-test#readme",
+  "type": "module"
+}
