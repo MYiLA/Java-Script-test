@@ -1,41 +1,6 @@
-const invoices = {
-  "customer": "MDT",
-  "performances": [{
-    "playId": "Гамлет",
-    "audience": 55,
-    "type": "tragedy"
-  }, {
-    "playId": "Ромео и Джульетта",
-    "audience": 35,
-    "type": "tragedy"
-  }, {
-    "playId": "Отелло",
-    "audience": 40,
-    "type": "comedy"
-  }]
-};
 
-
-
-const plays = {
-  "Гамлет": {
-    "name": "Гамлет",
-    "audience": 55,
-    "type": "tragedy"
-  }, 
-  
-  "Ромео и Джульетта": {
-    "name": "Ромео и Джульетта",
-    "audience": 35,
-    "type": "tragedy"
-  },
-  
-  "Отелло": {
-    "name": "Отелло",
-    "audience": 40,
-    "type": "comedy"
-  }
-}
+const invoices = require("./invoices.json");
+const plays = require("./plays.json");
 
 
 
@@ -92,13 +57,14 @@ const calcPrice = (type, audience) => {
 
 
 
-function statement(invoice, plays) {
-  let totalBonus = 0;
-  let totalPrice = 0;
-  let result = `Счет для ${invoice.customer}\n`;
+let totalBonus = 0;
+let totalPrice = 0;
 
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playId];
+function statement(invoice, plays) {
+  let result = `Счет для ${invoice[0].customer}\n`;
+
+  for (let perf of invoice[0].performances) {
+    const play = plays[0][perf.playId];
     const price = calcPrice(play.type, perf.audience);
 
     totalPrice += price;
